@@ -1,1 +1,15 @@
+version: "3.9"
+
 services:
+  postgres-auth:
+    image: postgres:14.1-alpine
+    environment:
+      - POSTGRES_USER=db_user_master
+      - POSTGRES_PASSWORD=db_user_password
+      - POSTGRES_DB=db_auth
+    ports:
+      - "5441:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
