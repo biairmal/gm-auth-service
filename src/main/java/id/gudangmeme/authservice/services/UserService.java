@@ -7,4 +7,6 @@ public interface UserService {
 
     UserAccount create(RegisterDto dto);
 
+    UserAccount findByUsername(String username);
+
 }
