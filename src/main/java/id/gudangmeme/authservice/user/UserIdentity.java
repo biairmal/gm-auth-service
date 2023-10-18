@@ -1,4 +1,4 @@
-package id.gudangmeme.authservice.models;
+package id.gudangmeme.authservice.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

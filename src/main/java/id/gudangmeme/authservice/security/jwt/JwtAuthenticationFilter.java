@@ -1,4 +1,4 @@
-package id.gudangmeme.authservice.security;
+package id.gudangmeme.authservice.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,6 +1,6 @@
 package id.gudangmeme.authservice.security;
 
-import id.gudangmeme.authservice.repositories.UserAccountRepository;
+import id.gudangmeme.authservice.user.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,0 +1,31 @@
+# --- APPLICATION PROPERTIES ---
+application:
+  security:
+    jwt:
+      secret-key: 9oTjhoiR/uzxjO27DZ9SgVUCvMOYr4JaH7rKvYbACh40ZXnieiWiNdCGksnHuCKC
+      access-token.expiration: 3600
+      refresh-token.expiration: 86400
+
+
+# --- FRAMEWORK & LIBRARY PROPERTIES ---
+server.servlet.contextPath: /api
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5441/db_auth
+    username: db_user_master
+    password: db_user_password
+  jpa:
+    properties.hibernate.format_sql: true
+  devtools:
+    livereload.enabled: true
+
+logging:
+  level:
+    org.hibernate:
+      SQL: DEBUG
+      type.descriptor.sql.BasicBinder: TRACE
+
+springdoc:
+  swagger-ui.path: /swagger-ui.html
+  api-docs.path: /api-docs

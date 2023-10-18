@@ -1,7 +1,5 @@
 # Requirements
 
----
-
 - **Password Validation**
     - [ ] Prevent weak password by matching it to specified criteria
     - [ ] Prevent commonly used password

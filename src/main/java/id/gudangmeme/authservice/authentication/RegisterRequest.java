@@ -1,9 +1,9 @@
-package id.gudangmeme.authservice.dto.in;
+package id.gudangmeme.authservice.authentication;
 
 import lombok.Getter;
 
 @Getter
-public class RegisterDto {
+public class RegisterRequest {
 
     private String username;
     private String email;

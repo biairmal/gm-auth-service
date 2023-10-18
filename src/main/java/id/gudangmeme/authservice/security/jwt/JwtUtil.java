@@ -1,10 +1,11 @@
-package id.gudangmeme.authservice.security;
+package id.gudangmeme.authservice.security.jwt;
 
-import id.gudangmeme.authservice.models.UserAccount;
+import id.gudangmeme.authservice.user.UserAccount;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +17,10 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "9oTjhoiR/uzxjO27DZ9SgVUCvMOYr4JaH7rKvYbACh40ZXnieiWiNdCGksnHuCKC";
-    private static final int TOKEN_EXPIRATION_IN_MINUTES = 60;
+    @Value("${application.security.jwt.access-token.expiration}")
+    private long accessTokenExpirationInSeconds;
+    @Value("${application.security.jwt.secret-key}")
+    private String secretKey;
 
     public String createToken(UserAccount userAccount, Map<String, Object> extraClaims) {
         return Jwts
@@ -26,7 +29,7 @@ public class JwtUtil {
                 .subject(userAccount.getUserIdentity().getUsername())
                 .issuer("gm-auth-server")
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * TOKEN_EXPIRATION_IN_MINUTES))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * accessTokenExpirationInSeconds))
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -55,7 +58,7 @@ public class JwtUtil {
     }
 
     private SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 
         return Keys.hmacShaKeyFor(keyBytes);
     }

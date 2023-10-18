@@ -1,11 +1,6 @@
-package id.gudangmeme.authservice.services.impl;
+package id.gudangmeme.authservice.user;
 
-import id.gudangmeme.authservice.dto.in.RegisterDto;
-import id.gudangmeme.authservice.models.UserAccount;
-import id.gudangmeme.authservice.models.UserIdentity;
-import id.gudangmeme.authservice.repositories.UserAccountRepository;
-import id.gudangmeme.authservice.repositories.UserIdentityRepository;
-import id.gudangmeme.authservice.services.UserService;
+import id.gudangmeme.authservice.authentication.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +20,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserAccount create(RegisterDto dto) {
+    public UserAccount create(RegisterRequest dto) {
         LocalDateTime now = LocalDateTime.now();
 
         UserIdentity userIdentity = UserIdentity.builder()
