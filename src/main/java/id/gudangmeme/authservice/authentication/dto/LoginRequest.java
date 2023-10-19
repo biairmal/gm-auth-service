@@ -1,4 +1,4 @@
-package id.gudangmeme.authservice.authentication;
+package id.gudangmeme.authservice.authentication.dto;
 
 import lombok.Getter;
 

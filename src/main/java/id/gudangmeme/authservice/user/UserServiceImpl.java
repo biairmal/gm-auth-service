@@ -1,6 +1,6 @@
 package id.gudangmeme.authservice.user;
 
-import id.gudangmeme.authservice.authentication.RegisterRequest;
+import id.gudangmeme.authservice.authentication.dto.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

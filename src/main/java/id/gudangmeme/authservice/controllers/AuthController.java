@@ -1,5 +1,8 @@
-package id.gudangmeme.authservice.authentication;
+package id.gudangmeme.authservice.controllers;
 
+import id.gudangmeme.authservice.authentication.AuthenticationService;
+import id.gudangmeme.authservice.authentication.dto.LoginRequest;
+import id.gudangmeme.authservice.authentication.dto.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

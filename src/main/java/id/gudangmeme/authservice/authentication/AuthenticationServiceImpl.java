@@ -1,6 +1,10 @@
 package id.gudangmeme.authservice.authentication;
 
-import id.gudangmeme.authservice.security.jwt.JwtUtil;
+import id.gudangmeme.authservice.authentication.dto.AuthenticationResponse;
+import id.gudangmeme.authservice.authentication.dto.LoginRequest;
+import id.gudangmeme.authservice.authentication.dto.RegisterRequest;
+import id.gudangmeme.authservice.token.Token;
+import id.gudangmeme.authservice.token.TokenService;
 import id.gudangmeme.authservice.user.UserAccount;
 import id.gudangmeme.authservice.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,23 +17,23 @@ class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
-    private final JwtUtil jwtUtil;
+    private final TokenService tokenService;
 
     @Autowired
-    AuthenticationServiceImpl(AuthenticationManager authenticationManager, UserService userService, JwtUtil jwtUtil) {
+    AuthenticationServiceImpl(AuthenticationManager authenticationManager, UserService userService, TokenService tokenService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
+        this.tokenService = tokenService;
     }
 
     @Override
     public AuthenticationResponse register(RegisterRequest dto) {
         UserAccount user = userService.create(dto);
-        String token = jwtUtil.createToken(user, null);
+        Token token = tokenService.generateUserToken(user);
 
         return AuthenticationResponse.builder()
-                .accessToken(token)
-                .refreshToken(null)
+                .accessToken(token.getAccessToken())
+                .refreshToken(token.getRefreshToken())
                 .build();
     }
 
@@ -38,12 +42,14 @@ class AuthenticationServiceImpl implements AuthenticationService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
         );
-        var user = userService.findByUsername(dto.getEmail());
-        var token = jwtUtil.createToken(user, null);
+
+        UserAccount user = userService.findByUsername(dto.getEmail());
+        Token token = tokenService.generateUserToken(user);
 
         return AuthenticationResponse.builder()
-                .accessToken(token)
-                .refreshToken(null)
+                .accessToken(token.getAccessToken())
+                .refreshToken(token.getRefreshToken())
                 .build();
     }
+
 }
