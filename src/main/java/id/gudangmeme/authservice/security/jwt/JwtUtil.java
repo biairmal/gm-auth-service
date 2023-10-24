@@ -19,17 +19,27 @@ public class JwtUtil {
 
     @Value("${application.security.jwt.access-token.expiration}")
     private long accessTokenExpirationInSeconds;
+    @Value("${application.security.jwt.refresh-token.expiration}")
+    private long refreshTokenExpirationInSeconds;
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
 
-    public String createToken(UserAccount userAccount, Map<String, Object> extraClaims) {
+    public String createAccessToken(UserAccount userAccount, Map<String, Object> extraClaims) {
+        return generateToken(userAccount, extraClaims, accessTokenExpirationInSeconds);
+    }
+
+    public String createRefreshToken(UserAccount userAccount, Map<String, Object> extraClaims) {
+        return generateToken(userAccount, extraClaims, refreshTokenExpirationInSeconds);
+    }
+
+    private String generateToken(UserAccount userAccount, Map<String, Object> extraClaims, long tokenExpiration) {
         return Jwts
                 .builder()
                 .claims(extraClaims)
                 .subject(userAccount.getUserIdentity().getUsername())
                 .issuer("gm-auth-server")
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * accessTokenExpirationInSeconds))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * tokenExpiration))
                 .signWith(getSigningKey())
                 .compact();
     }

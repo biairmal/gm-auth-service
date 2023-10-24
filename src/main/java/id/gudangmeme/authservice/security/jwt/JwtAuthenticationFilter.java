@@ -1,5 +1,6 @@
 package id.gudangmeme.authservice.security.jwt;
 
+import id.gudangmeme.authservice.security.SecurityConstants;
 import id.gudangmeme.authservice.token.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -32,17 +33,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String tokenPrefix = "Bearer ";
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String username;
 
-        if (authHeader == null || !authHeader.startsWith(tokenPrefix)) {
+        if (authHeader == null || !authHeader.startsWith(SecurityConstants.TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        jwt = authHeader.substring(tokenPrefix.length());
+        jwt = authHeader.substring(SecurityConstants.TOKEN_PREFIX.length());
         username = jwtUtil.extractUsername(jwt);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -59,6 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
+            return;
         }
         filterChain.doFilter(request, response);
     }

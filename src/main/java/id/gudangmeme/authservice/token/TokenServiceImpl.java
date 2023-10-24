@@ -27,13 +27,14 @@ class TokenServiceImpl implements TokenService {
         invalidateUserActiveTokens(userAccount.getUserIdentity().getId());
 
         // generate new token
-        String accessToken = jwtUtil.createToken(userAccount, null);
+        String accessToken = jwtUtil.createAccessToken(userAccount, null);
+        String refreshToken = jwtUtil.createRefreshToken(userAccount, null);
         Date accessTokenExpiration = jwtUtil.extractExpiration(accessToken);
 
         Token token = Token.builder()
                 .userIdentityId(userAccount.getUserIdentity().getId())
                 .accessToken(accessToken)
-                .refreshToken(null)
+                .refreshToken(refreshToken)
                 .isExpired(false)
                 .isRevoked(false)
                 .createdAt(LocalDateTime.now())
@@ -57,7 +58,12 @@ class TokenServiceImpl implements TokenService {
 
     @Override
     public boolean isTokenStillValid(String accessToken) {
-        Token token = tokenRepository.findByAccessToken(accessToken);
+        Token token;
+        token = tokenRepository.findByAccessToken(accessToken);
+
+        if (token == null)
+            token = tokenRepository.findByRefreshToken(accessToken);
+        if (token == null) return false;
 
         return !token.isExpired() && !token.isRevoked();
     }
